@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AB4DCCD11C84EA7B00F0A666"
+               BlueprintIdentifier = "AB8093D21C84F30000C2DEDC"
                BuildableName = "FileSpace.app"
                BlueprintName = "FileSpace"
                ReferencedContainer = "container:FileSpace.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AB4DCCD11C84EA7B00F0A666"
+            BlueprintIdentifier = "AB8093D21C84F30000C2DEDC"
             BuildableName = "FileSpace.app"
             BlueprintName = "FileSpace"
             ReferencedContainer = "container:FileSpace.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AB4DCCD11C84EA7B00F0A666"
+            BlueprintIdentifier = "AB8093D21C84F30000C2DEDC"
             BuildableName = "FileSpace.app"
             BlueprintName = "FileSpace"
             ReferencedContainer = "container:FileSpace.xcodeproj">
@@ -74,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AB4DCCD11C84EA7B00F0A666"
+            BlueprintIdentifier = "AB8093D21C84F30000C2DEDC"
             BuildableName = "FileSpace.app"
             BlueprintName = "FileSpace"
             ReferencedContainer = "container:FileSpace.xcodeproj">
