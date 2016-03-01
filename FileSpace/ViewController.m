@@ -32,11 +32,11 @@ static int theCount = 0;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)aMethod{
+- (void)aMethod {
     
 }
 
-- (void)addMyButton{    // Method for creating button, with background image and other properties
+- (void)addMyButton {    // Method for creating button, with background image and other properties
     
     NSLog(@"DEBUG: ViewController#addMyButton()");
     
@@ -56,8 +56,8 @@ static int theCount = 0;
     NSLog(@"you clicked on button %@ %d", sender.currentTitle, theCount);
     
     for (UIView *i in self.view.subviews){
-        if([i isKindOfClass:[UIButton class]]){
-            UIButton *but = (UIButton *)i;
+        if([i isKindOfClass:[UIButton class]]) {
+            UIButton *but = (UIButton *) i;
             if(but.tag == 26){
                 /// Write your code
                 NSMutableString* aString = [NSMutableString stringWithFormat:@"Count %d", theCount];
