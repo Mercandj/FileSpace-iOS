@@ -20,52 +20,84 @@ class MainViewController: UIViewController {
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
     
-    var mLabel: UILabel!
+    var mTimeLabel: UILabel!
     var mPrimaryColor: UIColor!
+    var mResetColor: UIColor!
     
-    var sCount: Int = 0
+    var mCountMinute: Int = 0
+    var mCountSecond: Int = 0
+    var mCountCentSecond: Int = 0
+    var mTimer: NSTimer!
     
     
     // MARK: View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        print("toto");
         
         initColor();
-        addButton();
-        addLabel();
         
-        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "update", userInfo: nil, repeats: true)
+        addLabel();
+        addButtons();
     }
     
     func initColor() {
         mPrimaryColor = UIColor(netHex: 0x009688);
-    }
-    
-    func addButton() {
-        let button   = UIButton(type: UIButtonType.System) as UIButton
-        button.frame = CGRectMake(20, 100, 160, 46)
-        button.backgroundColor = mPrimaryColor;
-        button.setTitle("My first swift button", forState: UIControlState.Normal)
-        button.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        button.setTitleColor(UIColor.whiteColor(), forState: .Normal);
-        button.setTitleColor(UIColor.grayColor(), forState: .Selected);
-        
-        self.view.addSubview(button)
-    }
-    
-    func buttonAction(sender:UIButton!) {
-        increaseCount()
+        mResetColor = UIColor(netHex: 0xDD2C00);
     }
     
     func addLabel() {
-        mLabel = UILabel();
-        mLabel.frame = CGRectMake(20, 200, 160, 46)
-        mLabel.text = "toto " + String(sCount);
-        mLabel.textColor = mPrimaryColor;
-        self.view.addSubview(mLabel)
+        mTimeLabel = UILabel();
+        mTimeLabel.frame = CGRectMake(0, 70, self.view.frame.size.width, 100)
+        mTimeLabel.textAlignment = .Center;
+        mTimeLabel.font = UIFont(name: "HelveticaNeue-Light", size: 68.0)
+        mTimeLabel.textColor = mPrimaryColor;
+        syncTimeLabel()
+        self.view.addSubview(mTimeLabel)
+    }
+    
+    func addButtons() {
+        
+        let xPosition: CGFloat = (self.view.frame.size.width - 200) / 2;
+        
+        let button   = UIButton(type: UIButtonType.System) as UIButton
+        button.frame = CGRectMake(xPosition, 200, 200, 46)
+        button.backgroundColor = mPrimaryColor;
+        button.titleLabel!.font = UIFont(name: "HelveticaNeue", size: 20.0)
+        button.setTitle("Start / Stop", forState: UIControlState.Normal)
+        button.addTarget(self, action: "startStop:", forControlEvents: UIControlEvents.TouchUpInside)
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal);
+        button.setTitleColor(UIColor.grayColor(), forState: .Selected);
+        self.view.addSubview(button)
+        
+        let buttonReset   = UIButton(type: UIButtonType.System) as UIButton
+        buttonReset.frame = CGRectMake(xPosition, 260, 200, 46)
+        buttonReset.backgroundColor = mResetColor;
+        buttonReset.titleLabel!.font = UIFont(name: "HelveticaNeue", size: 20.0)
+        buttonReset.setTitle("Reset", forState: UIControlState.Normal)
+        buttonReset.addTarget(self, action: "reset:", forControlEvents: UIControlEvents.TouchUpInside)
+        buttonReset.setTitleColor(UIColor.whiteColor(), forState: .Normal);
+        buttonReset.setTitleColor(UIColor.grayColor(), forState: .Selected);
+        self.view.addSubview(buttonReset)
+    }
+    
+    func startStop(sender:UIButton!) {
+        startStop()
+    }
+    
+    func startStop() {
+        if(mTimer == nil) {
+            mTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: "update", userInfo: nil, repeats: true)
+        } else {
+            mTimer.invalidate()
+            mTimer = nil
+        }
+    }
+    
+    func reset(sender:UIButton!) {
+        mCountSecond = 0;
+        mCountCentSecond = 0;
+        syncTimeLabel();
     }
     
     // must be internal or public.
@@ -74,10 +106,33 @@ class MainViewController: UIViewController {
     }
     
     func increaseCount() {
-        sCount++;
-        mLabel.text = "toto "+String(sCount);
+        mCountCentSecond++;
+        if(mCountCentSecond>=100) {
+            mCountCentSecond = 0;
+            mCountSecond++;
+            if(mCountCentSecond>=60) {
+                mCountCentSecond = 0;
+                mCountMinute++;
+            }
+        }
+        syncTimeLabel();
     }
     
+    func syncTimeLabel() {
+        var cent:String;
+        if(mCountCentSecond<10) {
+            cent = ":0" + String(mCountCentSecond)
+        } else {
+            cent = ":" + String(mCountCentSecond)
+        }
+        
+        if(mCountSecond<10) {
+            mTimeLabel.text = String(mCountMinute) + ":0" + String(mCountSecond) + cent;
+        } else {
+            mTimeLabel.text = String(mCountMinute) + ":" + String(mCountSecond) + cent;
+        }
+        
+    }
 }
 
 extension UIColor {
