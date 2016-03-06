@@ -110,8 +110,8 @@ class MainViewController: UIViewController {
         if(mCountCentSecond>=100) {
             mCountCentSecond = 0;
             mCountSecond++;
-            if(mCountCentSecond>=60) {
-                mCountCentSecond = 0;
+            if(mCountSecond>=60) {
+                mCountSecond = 0;
                 mCountMinute++;
             }
         }
