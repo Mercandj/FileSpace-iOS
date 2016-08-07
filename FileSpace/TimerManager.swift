@@ -21,6 +21,14 @@ class TimerManager {
         mDuration = TimerManagerDuration();
     }
     
+    internal func startStop() {
+        if (!isStarted()) {
+            start();
+        } else {
+            stop();
+        }
+    }
+    
     internal func start() {
         mTimer = NSTimer.scheduledTimerWithTimeInterval(
             0.01,

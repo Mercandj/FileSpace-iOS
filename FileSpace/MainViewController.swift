@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 
 
-class MainViewController: UIViewController, TimerManagerListener {
+class MainViewController: UIViewController, TimerManagerListener, OutputManagerListener {
     // MARK: Properties
     
     @IBOutlet weak var titleTextField: UITextField!
@@ -35,6 +35,16 @@ class MainViewController: UIViewController, TimerManagerListener {
         addLabel();
         addButtons();
         addOutputLabel();
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        TimerManager.sInstance.addTimerManagerListener(self);
+        OutputManager.sInstance.addOutputManagerListener(self);
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        TimerManager.sInstance.removeAllTimerManagerListeners();
+        OutputManager.sInstance.removeOutputManagerListener();
     }
     
     func initColor() {
@@ -82,28 +92,19 @@ class MainViewController: UIViewController, TimerManagerListener {
         mOutputTimeLabel = UILabel();
         mOutputTimeLabel.frame = CGRectMake(0, 320, self.view.frame.size.width, 100)
         mOutputTimeLabel.textAlignment = .Center;
-        mOutputTimeLabel.font = UIFont(name: "HelveticaNeue-Light", size: 20.0)
+        mOutputTimeLabel.font = UIFont(name: "HelveticaNeue-Light", size: 16.0)
         mOutputTimeLabel.textColor = mOutputColor;
         self.view.addSubview(mOutputTimeLabel);
-        mOutputTimeLabel.text = "Output...";
+        mOutputTimeLabel.text = OutputManager.sInstance.mOutput;
     }
     
     func startStop(sender:UIButton!) {
-        startStop();
-    }
-    
-    func startStop() {
-        if(!TimerManager.sInstance.isStarted()) {
-            TimerManager.sInstance.addTimerManagerListener(self);
-            TimerManager.sInstance.start();
-        } else {
-            TimerManager.sInstance.stop();
-            TimerManager.sInstance.removeAllTimerManagerListeners();
-        }
+        TimerManager.sInstance.startStop();
     }
     
     func reset(sender:UIButton!) {
         TimerManager.sInstance.reset();
+        OutputManager.sInstance.addOutput(".");
     }
 
     /**
@@ -111,6 +112,13 @@ class MainViewController: UIViewController, TimerManagerListener {
      */
     func onTimerUpdate(durationFromStart: TimerManagerDuration) {
         syncTimeLabel();
+    }
+    
+    /**
+     * Override
+     */
+    func onOutputChanged(output: String) {
+        mOutputTimeLabel.text = output;
     }
     
     func syncTimeLabel() {
