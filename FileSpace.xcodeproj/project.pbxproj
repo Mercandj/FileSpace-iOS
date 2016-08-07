@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB2AA9581D5775CD0088117C /* TimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2AA9571D5775CD0088117C /* TimerManager.swift */; };
 		AB5232591C8CB3C8004120E8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5232581C8CB3C8004120E8 /* MainViewController.swift */; };
 		AB52325C1C8CB86A004120E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB52325B1C8CB86A004120E8 /* Main.storyboard */; };
 		AB8093E41C84F30000C2DEDC /* FileSpace.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AB8093E21C84F30000C2DEDC /* FileSpace.xcdatamodeld */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB2AA9571D5775CD0088117C /* TimerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerManager.swift; sourceTree = "<group>"; };
 		AB5232581C8CB3C8004120E8 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		AB52325B1C8CB86A004120E8 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		AB8093D31C84F30000C2DEDC /* FileSpace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileSpace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +60,7 @@
 			children = (
 				ABC6C4951D576E3F00B5C7C8 /* AppDelegate.swift */,
 				AB5232581C8CB3C8004120E8 /* MainViewController.swift */,
+				AB2AA9571D5775CD0088117C /* TimerManager.swift */,
 				AB8093E51C84F30000C2DEDC /* Assets.xcassets */,
 				AB8093E71C84F30000C2DEDC /* LaunchScreen.storyboard */,
 				AB8093EA1C84F30000C2DEDC /* Info.plist */,
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABC6C4961D576E3F00B5C7C8 /* AppDelegate.swift in Sources */,
+				AB2AA9581D5775CD0088117C /* TimerManager.swift in Sources */,
 				AB5232591C8CB3C8004120E8 /* MainViewController.swift in Sources */,
 				AB8093E41C84F30000C2DEDC /* FileSpace.xcdatamodeld in Sources */,
 			);

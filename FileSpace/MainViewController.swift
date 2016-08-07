@@ -8,8 +8,8 @@
 
 import Foundation
 
-
 import UIKit
+
 
 class MainViewController: UIViewController {
     // MARK: Properties
@@ -87,8 +87,10 @@ class MainViewController: UIViewController {
     
     func startStop() {
         if(mTimer == nil) {
+            TimerManager.sInstance.start();
             mTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)
         } else {
+            TimerManager.sInstance.stop();
             mTimer.invalidate()
             mTimer = nil
         }
@@ -99,18 +101,20 @@ class MainViewController: UIViewController {
         mCountCentSecond = 0;
         syncTimeLabel();
     }
-    
-    // must be internal or public.
+
+    /**
+     * Must be internal or public.
+     */
     func update() {
         increaseCount()
     }
     
     func increaseCount() {
         mCountCentSecond += 1;
-        if(mCountCentSecond>=100) {
+        if (mCountCentSecond>=100) {
             mCountCentSecond = 0;
             mCountSecond += 1;
-            if(mCountSecond>=60) {
+            if(mCountSecond >= 60) {
                 mCountSecond = 0;
                 mCountMinute += 1;
             }
@@ -131,7 +135,6 @@ class MainViewController: UIViewController {
         } else {
             mTimeLabel.text = String(mCountMinute) + ":" + String(mCountSecond) + cent;
         }
-        
     }
 }
 
