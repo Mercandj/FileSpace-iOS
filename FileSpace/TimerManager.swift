@@ -15,14 +15,19 @@ class TimerManager {
     
     var mTimer: NSTimer!
     var mDuration: TimerManagerDuration;
-    var mTimerManagerListeners = [TimerManagerListener]()
+    var mTimerManagerListeners = [TimerManagerListener]();
     
     private init () {
         mDuration = TimerManagerDuration();
     }
     
     internal func start() {
-        mTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(TimerManager.update), userInfo: nil, repeats: true);
+        mTimer = NSTimer.scheduledTimerWithTimeInterval(
+            0.01,
+            target: self,
+            selector: #selector(TimerManager.update),
+            userInfo: nil,
+            repeats: true);
     }
     
     internal func stop() {
@@ -30,12 +35,25 @@ class TimerManager {
         mTimer = nil;
     }
     
+    internal func reset() {
+        mDuration.reset();
+        notifyListeners(mDuration);
+    }
+    
+    internal func getStringCurrentTime() -> String {
+        return mDuration.getStringCount();
+    }
+    
     internal func addTimerManagerListener(timerManagerListener: TimerManagerListener) {
         mTimerManagerListeners.append(timerManagerListener);
     }
     
-    internal func removeTimerManagerListener(timerManagerListener: TimerManagerListener) {
-        //mTimerManagerListeners.remo(timerManagerListener);
+    internal func removeAllTimerManagerListeners() {
+        mTimerManagerListeners.removeAll();
+    }
+    
+    internal func isStarted() -> Bool {
+        return mTimer != nil;
     }
     
     /**
@@ -43,6 +61,13 @@ class TimerManager {
      */
     @objc func update() {
         mDuration.increase();
+        notifyListeners(mDuration);
+    }
+    
+    private func notifyListeners(durationFromStart: TimerManagerDuration) {
+        for timerManagerListener in mTimerManagerListeners {
+            timerManagerListener.onTimerUpdate(durationFromStart);
+        }
     }
 }
 
@@ -52,7 +77,7 @@ class TimerManagerDuration : CustomStringConvertible {
     private var mCentSecond: Int = 0;
     
     var description: String {
-        return "mMinute : \(mMinute), mSecond : \(mSecond), mCentSecond : \(mCentSecond)"
+        return "mMinute : \(mMinute), mSecond : \(mSecond), mCentSecond : \(mCentSecond)";
     }
     
     internal init() {
@@ -61,7 +86,7 @@ class TimerManagerDuration : CustomStringConvertible {
     
     func increase() {
         mCentSecond += 1;
-        if (mCentSecond>=100) {
+        if (mCentSecond >= 100) {
             mCentSecond = 0;
             mSecond += 1;
             if(mSecond >= 60) {
@@ -70,9 +95,30 @@ class TimerManagerDuration : CustomStringConvertible {
             }
         }
     }
+    
+    func reset() {
+        mMinute = 0;
+        mSecond = 0;
+        mCentSecond = 0;
+    }
+    
+    func getStringCount() -> String {
+        var cent:String;
+        if (mCentSecond < 10) {
+            cent = ":0" + String(mCentSecond)
+        } else {
+            cent = ":" + String(mCentSecond)
+        }
+        
+        if (mSecond < 10) {
+            return String(mMinute) + ":0" + String(mSecond) + cent;
+        } else {
+            return String(mMinute) + ":" + String(mSecond) + cent;
+        }
+    }
 }
 
 protocol TimerManagerListener {
 
-    mutating func onTimerUpdate(durationFromStart: TimerManagerDuration);
+    func onTimerUpdate(durationFromStart: TimerManagerDuration);
 }

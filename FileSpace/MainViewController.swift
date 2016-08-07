@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, TimerManagerListener {
     // MARK: Properties
     
     @IBOutlet weak var titleTextField: UITextField!
@@ -19,16 +19,11 @@ class MainViewController: UIViewController {
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
-    
     var mTimeLabel: UILabel!
+    var mOutputTimeLabel: UILabel!
     var mPrimaryColor: UIColor!
     var mResetColor: UIColor!
-    
-    var mCountMinute: Int = 0
-    var mCountSecond: Int = 0
-    var mCountCentSecond: Int = 0
-    var mTimer: NSTimer!
-    
+    var mOutputColor: UIColor!
     
     // MARK: View Life Cycle
     
@@ -39,11 +34,13 @@ class MainViewController: UIViewController {
         
         addLabel();
         addButtons();
+        addOutputLabel();
     }
     
     func initColor() {
         mPrimaryColor = UIColor(netHex: 0x009688);
         mResetColor = UIColor(netHex: 0xDD2C00);
+        mOutputColor = UIColor(netHex: 0x000000);
     }
     
     func addLabel() {
@@ -73,68 +70,51 @@ class MainViewController: UIViewController {
         let buttonReset   = UIButton(type: UIButtonType.System) as UIButton
         buttonReset.frame = CGRectMake(xPosition, 260, 200, 46)
         buttonReset.backgroundColor = mResetColor;
-        buttonReset.titleLabel!.font = UIFont(name: "HelveticaNeue", size: 20.0)
-        buttonReset.setTitle("Reset", forState: UIControlState.Normal)
-        buttonReset.addTarget(self, action: #selector(MainViewController.reset(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        buttonReset.titleLabel!.font = UIFont(name: "HelveticaNeue", size: 20.0);
+        buttonReset.setTitle("Reset", forState: UIControlState.Normal);
+        buttonReset.addTarget(self, action: #selector(MainViewController.reset(_:)), forControlEvents: UIControlEvents.TouchUpInside);
         buttonReset.setTitleColor(UIColor.whiteColor(), forState: .Normal);
         buttonReset.setTitleColor(UIColor.grayColor(), forState: .Selected);
-        self.view.addSubview(buttonReset)
+        self.view.addSubview(buttonReset);
+    }
+    
+    func addOutputLabel() {
+        mOutputTimeLabel = UILabel();
+        mOutputTimeLabel.frame = CGRectMake(0, 320, self.view.frame.size.width, 100)
+        mOutputTimeLabel.textAlignment = .Center;
+        mOutputTimeLabel.font = UIFont(name: "HelveticaNeue-Light", size: 20.0)
+        mOutputTimeLabel.textColor = mOutputColor;
+        self.view.addSubview(mOutputTimeLabel);
+        mOutputTimeLabel.text = "Output...";
     }
     
     func startStop(sender:UIButton!) {
-        startStop()
+        startStop();
     }
     
     func startStop() {
-        if(mTimer == nil) {
+        if(!TimerManager.sInstance.isStarted()) {
+            TimerManager.sInstance.addTimerManagerListener(self);
             TimerManager.sInstance.start();
-            mTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)
         } else {
             TimerManager.sInstance.stop();
-            mTimer.invalidate()
-            mTimer = nil
+            TimerManager.sInstance.removeAllTimerManagerListeners();
         }
     }
     
     func reset(sender:UIButton!) {
-        mCountSecond = 0;
-        mCountCentSecond = 0;
-        syncTimeLabel();
+        TimerManager.sInstance.reset();
     }
 
     /**
-     * Must be internal or public.
+     * Override
      */
-    func update() {
-        increaseCount()
-    }
-    
-    func increaseCount() {
-        mCountCentSecond += 1;
-        if (mCountCentSecond>=100) {
-            mCountCentSecond = 0;
-            mCountSecond += 1;
-            if(mCountSecond >= 60) {
-                mCountSecond = 0;
-                mCountMinute += 1;
-            }
-        }
+    func onTimerUpdate(durationFromStart: TimerManagerDuration) {
         syncTimeLabel();
     }
     
     func syncTimeLabel() {
-        var cent:String;
-        if(mCountCentSecond<10) {
-            cent = ":0" + String(mCountCentSecond)
-        } else {
-            cent = ":" + String(mCountCentSecond)
-        }
-        
-        if(mCountSecond<10) {
-            mTimeLabel.text = String(mCountMinute) + ":0" + String(mCountSecond) + cent;
-        } else {
-            mTimeLabel.text = String(mCountMinute) + ":" + String(mCountSecond) + cent;
-        }
+        mTimeLabel.text = TimerManager.sInstance.getStringCurrentTime();
     }
 }
 
