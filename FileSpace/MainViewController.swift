@@ -65,7 +65,7 @@ class MainViewController: UIViewController {
         button.backgroundColor = mPrimaryColor;
         button.titleLabel!.font = UIFont(name: "HelveticaNeue", size: 20.0)
         button.setTitle("Start / Stop", forState: UIControlState.Normal)
-        button.addTarget(self, action: "startStop:", forControlEvents: UIControlEvents.TouchUpInside)
+        button.addTarget(self, action: #selector(MainViewController.startStop(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         button.setTitleColor(UIColor.whiteColor(), forState: .Normal);
         button.setTitleColor(UIColor.grayColor(), forState: .Selected);
         self.view.addSubview(button)
@@ -75,7 +75,7 @@ class MainViewController: UIViewController {
         buttonReset.backgroundColor = mResetColor;
         buttonReset.titleLabel!.font = UIFont(name: "HelveticaNeue", size: 20.0)
         buttonReset.setTitle("Reset", forState: UIControlState.Normal)
-        buttonReset.addTarget(self, action: "reset:", forControlEvents: UIControlEvents.TouchUpInside)
+        buttonReset.addTarget(self, action: #selector(MainViewController.reset(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         buttonReset.setTitleColor(UIColor.whiteColor(), forState: .Normal);
         buttonReset.setTitleColor(UIColor.grayColor(), forState: .Selected);
         self.view.addSubview(buttonReset)
@@ -87,7 +87,7 @@ class MainViewController: UIViewController {
     
     func startStop() {
         if(mTimer == nil) {
-            mTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: "update", userInfo: nil, repeats: true)
+            mTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(MainViewController.update), userInfo: nil, repeats: true)
         } else {
             mTimer.invalidate()
             mTimer = nil
@@ -106,13 +106,13 @@ class MainViewController: UIViewController {
     }
     
     func increaseCount() {
-        mCountCentSecond++;
+        mCountCentSecond += 1;
         if(mCountCentSecond>=100) {
             mCountCentSecond = 0;
-            mCountSecond++;
+            mCountSecond += 1;
             if(mCountSecond>=60) {
                 mCountSecond = 0;
-                mCountMinute++;
+                mCountMinute += 1;
             }
         }
         syncTimeLabel();
